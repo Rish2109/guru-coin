@@ -35,7 +35,7 @@ export default function FinalPage() {
 
     // Handle 5-second video restart
     useEffect(() => {
-        const setupVideoRestart = (videoRef: React.RefObject<HTMLVideoElement>) => {
+        const setupVideoRestart = (videoRef: React.RefObject<HTMLVideoElement | null>) => {
             if (videoRef.current) {
                 const video = videoRef.current;
                 const handleTimeUpdate = () => {
@@ -46,6 +46,7 @@ export default function FinalPage() {
                 video.addEventListener('timeupdate', handleTimeUpdate);
                 return () => video.removeEventListener('timeupdate', handleTimeUpdate);
             }
+            return undefined;
         };
 
         const cleanupFunctions: (() => void)[] = [];

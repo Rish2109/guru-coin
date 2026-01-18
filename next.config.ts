@@ -1,12 +1,10 @@
 import type {NextConfig} from 'next';
+import { resolve } from 'path';
 
 const nextConfig: NextConfig = {
   /* config options here */
   typescript: {
     ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
   },
   images: {
     remotePatterns: [
@@ -47,6 +45,13 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
+  },
+  // React Compiler configuration (disabled by default)
+  reactCompiler: false,
+  
+  // Turbopack configuration for Next.js 16
+  turbopack: {
+    root: resolve(process.cwd()),
   },
 };
 
