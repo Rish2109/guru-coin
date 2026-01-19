@@ -36,23 +36,35 @@ export default function MazePage() {
   const [gameWon, setGameWon] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean | null>(null); // null = checking, true = mobile, false = desktop
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  // Immediate mobile detection - happens before render
+  // Immediate mobile detection and redirect - no flash
   useEffect(() => {
-    // Quick synchronous mobile check
-    const userAgent = navigator.userAgent;
-    const isMobileUA = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
-    const isMobileScreen = window.innerWidth <= 768 && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    const detectMobileDevice = () => {
+      // Quick user agent check first (most reliable)
+      const userAgent = navigator.userAgent;
+      if (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)) {
+        return true;
+      }
+      
+      // Screen size check as secondary
+      if (window.innerWidth <= 768 && ('ontouchstart' in window || navigator.maxTouchPoints > 0)) {
+        return true;
+      }
+      
+      return false;
+    };
+
+    const mobile = detectMobileDevice();
+    setIsMobile(mobile);
     
-    if (isMobileUA || isMobileScreen) {
-      // Immediate redirect - no state update needed
+    if (mobile) {
+      setIsRedirecting(true);
+      // Use replace for no back button history
       router.replace('/home');
-      return;
     }
-    
-    setIsMobile(false); // Only set state if not mobile
   }, [router]);
 
   // Check if player reached the end
@@ -207,15 +219,22 @@ export default function MazePage() {
     );
   };
 
-  // Don't render anything if mobile (seamless)
-  if (typeof window !== 'undefined') {
-    const userAgent = navigator.userAgent;
-    const isMobileUA = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
-    const isMobileScreen = window.innerWidth <= 768 && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
-    
-    if (isMobileUA || isMobileScreen) {
-      return null; // Completely seamless - no flash
-    }
+  // Show loading screen or redirect message for mobile
+  if (isMobile === null || (isMobile && isRedirecting)) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="bg-white text-black px-6 py-3 rounded-lg shadow-lg">
+          <p className="text-sm font-medium">
+            {isMobile ? 'Planting the Trees!!' : 'Loading...'}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render maze at all if mobile
+  if (isMobile) {
+    return null;
   }
 
   return (
