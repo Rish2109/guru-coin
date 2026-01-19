@@ -254,11 +254,23 @@ export default function HomePage() {
                 autoPlay
                 loop
                 muted
-                className="fixed top-0 left-0 w-full h-full object-fill z-0"
+                playsInline
+                controls={false}
+                disablePictureInPicture={true}
+                disableRemotePlayback={true}
+                preload="auto"
+                className="fixed top-0 left-0 w-full h-full object-fill z-0 pointer-events-none"
+                style={{
+                    WebkitUserSelect: 'none',
+                    MozUserSelect: 'none',
+                    msUserSelect: 'none',
+                    userSelect: 'none',
+                }}
+                onContextMenu={(e) => e.preventDefault()}
             />
             
             {/* Content Overlay */}
-            <div className="relative z-10 flex flex-col min-h-screen">
+            <div className="relative z-10 flex flex-col min-h-screen overflow-y-auto md:overflow-y-visible">
              <audio ref={audioRef} loop>
                 <source src="/HomePageAudio.mpeg" type="audio/mpeg" />
             </audio>

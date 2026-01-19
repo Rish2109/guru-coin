@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Volume2, VolumeX } from 'lucide-react';
+import { Volume2, VolumeX, ArrowLeft } from 'lucide-react';
 
 export default function FinalPage() {
     const [showFog, setShowFog] = useState(true);
@@ -79,6 +79,10 @@ export default function FinalPage() {
         }
     };
 
+    const handleBackClick = () => {
+        router.back(); // Go to previous page
+    };
+
     // Auto-play music when component mounts
     useEffect(() => {
         const startAudio = async () => {
@@ -99,11 +103,19 @@ export default function FinalPage() {
     }, []);
 
     return (
-        <div className="relative w-full min-h-screen md:h-screen md:overflow-hidden">
+        <div className="relative w-full min-h-screen md:h-screen md:overflow-hidden overflow-y-auto">
             {/* Background Audio */}
             <audio ref={audioRef} loop>
                 <source src="/LastPageAudio.mpeg" type="audio/mpeg" />
             </audio>
+
+            {/* Back Button */}
+            <button
+                onClick={handleBackClick}
+                className="fixed bottom-4 left-4 z-50 bg-black/50 backdrop-blur-sm text-white rounded-full p-3 hover:bg-black/70 transition-all duration-200 transform hover:scale-110"
+            >
+                <ArrowLeft className="w-6 h-6" />
+            </button>
 
             {/* Mute/Unmute Button */}
             <button
@@ -124,7 +136,7 @@ export default function FinalPage() {
             />
             
             {/* Video Grid Overlay */}
-            <div className="relative md:absolute md:inset-0 flex items-center justify-center z-40 px-4 md:px-8 py-8 md:py-0 min-h-screen">
+            <div className="relative md:absolute md:inset-0 flex items-center justify-center z-40 px-4 md:px-8 py-8 md:py-0 min-h-screen overflow-y-auto md:overflow-y-visible">
                 <div 
                     className="transition-all duration-[4000ms] ease-out max-w-6xl w-full"
                     style={{
