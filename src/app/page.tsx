@@ -36,31 +36,23 @@ export default function MazePage() {
   const [gameWon, setGameWon] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  // Device detection and redirect for mobile users
+  // Immediate mobile detection - happens before render
   useEffect(() => {
-    const detectMobileDevice = () => {
-      const userAgent = navigator.userAgent.toLowerCase();
-      const mobileKeywords = ['android', 'iphone', 'ipad', 'ipod', 'blackberry', 'windows phone'];
-      
-      // Check user agent
-      const isMobileUA = mobileKeywords.some(keyword => userAgent.includes(keyword));
-      
-      // Check screen size as backup
-      const isMobileScreen = window.innerWidth <= 768;
-      
-      // Check touch capability
-      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-      
-      return isMobileUA || (isMobileScreen && isTouchDevice);
-    };
-
-    // Redirect mobile users to home page
-    if (detectMobileDevice()) {
+    // Quick synchronous mobile check
+    const userAgent = navigator.userAgent;
+    const isMobileUA = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+    const isMobileScreen = window.innerWidth <= 768 && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    
+    if (isMobileUA || isMobileScreen) {
+      // Immediate redirect - no state update needed
       router.replace('/home');
       return;
     }
+    
+    setIsMobile(false); // Only set state if not mobile
   }, [router]);
 
   // Check if player reached the end
@@ -214,6 +206,17 @@ export default function MazePage() {
       />
     );
   };
+
+  // Don't render anything if mobile (seamless)
+  if (typeof window !== 'undefined') {
+    const userAgent = navigator.userAgent;
+    const isMobileUA = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+    const isMobileScreen = window.innerWidth <= 768 && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    
+    if (isMobileUA || isMobileScreen) {
+      return null; // Completely seamless - no flash
+    }
+  }
 
   return (
     <div className="min-h-screen bg-green-200 flex flex-col items-center p-5 relative" style={{
