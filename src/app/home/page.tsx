@@ -231,7 +231,10 @@ export default function HomePage() {
     }, [lastScrollY]);
 
     return (
-        <div className="flex flex-col min-h-screen text-foreground relative">
+        <div className="flex flex-col min-h-screen text-foreground relative" style={{
+            minHeight: '100vh',
+            minHeight: '100dvh', // Dynamic viewport height for modern browsers
+        }}>
             {/* Add custom styles for slide animation */}
             <style jsx>{`
                 @keyframes slideInLeft {
@@ -259,18 +262,26 @@ export default function HomePage() {
                 disablePictureInPicture={true}
                 disableRemotePlayback={true}
                 preload="auto"
-                className="fixed top-0 left-0 w-full h-full object-fill z-0 pointer-events-none"
+                className="fixed top-0 left-0 w-screen h-screen object-cover z-0 pointer-events-none"
                 style={{
                     WebkitUserSelect: 'none',
                     MozUserSelect: 'none',
                     msUserSelect: 'none',
                     userSelect: 'none',
+                    minHeight: '100vh',
+                    minWidth: '100vw',
+                    position: 'fixed',
+                    transform: 'translate3d(0, 0, 0)',
+                    backfaceVisibility: 'hidden',
                 }}
                 onContextMenu={(e) => e.preventDefault()}
             />
             
             {/* Content Overlay */}
-            <div className="relative z-10 flex flex-col min-h-screen overflow-y-auto md:overflow-y-visible">
+            <div className="relative z-10 flex flex-col min-h-screen overflow-y-auto md:overflow-y-visible" style={{
+                minHeight: '100vh',
+                minHeight: '100dvh', // Dynamic viewport height for modern browsers
+            }}>
              <audio ref={audioRef} loop>
                 <source src="/HomePageAudio.mpeg" type="audio/mpeg" />
             </audio>
