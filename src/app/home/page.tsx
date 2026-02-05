@@ -200,11 +200,11 @@ export default function HomePage() {
     };
 
     const copyContractAddress = async () => {
-        const contractAddress = '3VWGMLE5VBTDVYFBNFIK4GZPSTMSCBR52HTBPZZPPUMP';
+        const contractAddress = 'Coming Soon';
         try {
             await navigator.clipboard.writeText(contractAddress);
             toast({
-                title: "Contract Address Copied to the ClipBoard",
+                title: "Contract Address coming soon",
                 duration: 2000,
             });
         } catch (err) {
@@ -452,18 +452,16 @@ export default function HomePage() {
                     </div>
                 </section>
 
-                {/* Contract Address Image - Slides in from left */}
+                {/* Contract Address Text - Slides in from left */}
                 {showContractAddress && (
                     <section ref={caRef} className="pt-1 max-w-3xl mx-auto animate-slide-in-left px-4">
                         <div className="flex justify-center">
-                            <Image
-                                src="/CA.png"
-                                alt="Contract Address"
-                                width={450}
-                                height={110}
-                                className="w-full max-w-[450px] h-auto rounded-lg shadow-lg object-contain cursor-pointer hover:scale-105 transition-transform"
+                            <div
+                                className="bg-gradient-to-r from-orange-500 to-yellow-500 text-white text-2xl md:text-3xl font-bold py-6 px-8 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-transform text-center"
                                 onClick={copyContractAddress}
-                            />
+                            >
+                                Coming Soon
+                            </div>
                         </div>
                     </section>
                 )}
