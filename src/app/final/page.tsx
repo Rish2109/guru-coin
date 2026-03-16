@@ -10,10 +10,6 @@ export default function FinalPage() {
     const [showText, setShowText] = useState(false);
     const [isPlaying, setIsPlaying] = useState(true);
     const router = useRouter();
-    const video1Ref = useRef<HTMLVideoElement>(null);
-    const video2Ref = useRef<HTMLVideoElement>(null);
-    const video3Ref = useRef<HTMLVideoElement>(null);
-    const video4Ref = useRef<HTMLVideoElement>(null);
     const audioRef = useRef<HTMLAudioElement>(null);
 
     useEffect(() => {
@@ -32,39 +28,6 @@ export default function FinalPage() {
             clearTimeout(textTimer);
         };
     }, []);
-
-    // Handle 5-second video restart
-    useEffect(() => {
-        const setupVideoRestart = (videoRef: React.RefObject<HTMLVideoElement | null>) => {
-            if (videoRef.current) {
-                const video = videoRef.current;
-                const handleTimeUpdate = () => {
-                    if (video.currentTime >= 5) {
-                        video.currentTime = 0;
-                    }
-                };
-                video.addEventListener('timeupdate', handleTimeUpdate);
-                return () => video.removeEventListener('timeupdate', handleTimeUpdate);
-            }
-            return undefined;
-        };
-
-        const cleanupFunctions: (() => void)[] = [];
-        
-        const cleanup1 = setupVideoRestart(video1Ref);
-        const cleanup2 = setupVideoRestart(video2Ref);
-        const cleanup3 = setupVideoRestart(video3Ref);
-        const cleanup4 = setupVideoRestart(video4Ref);
-        
-        if (cleanup1) cleanupFunctions.push(cleanup1);
-        if (cleanup2) cleanupFunctions.push(cleanup2);
-        if (cleanup3) cleanupFunctions.push(cleanup3);
-        if (cleanup4) cleanupFunctions.push(cleanup4);
-
-        return () => {
-            cleanupFunctions.forEach(cleanup => cleanup());
-        };
-    }, [showText]);
 
     // Toggle music function
     const toggleMusic = () => {
@@ -149,116 +112,28 @@ export default function FinalPage() {
                         Behind the Scenes
                     </h1>
                     
-                    {/* Video Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 max-w-7xl mx-auto">
-                        {/* Video 1 */}
-                        <div className="relative flex flex-col items-center group cursor-pointer">
-                            <div className="relative bg-black/20 rounded-3xl overflow-hidden border-4 border-primary hover:border-primary/60 hover:shadow-2xl hover:shadow-primary/20 transition-all duration-300 w-full max-w-[280px] md:w-80 hover:scale-105 group-hover:bg-black/30">
-                                <video 
-                                    ref={video1Ref}
-                                    className="w-full h-48 md:h-64 object-cover transition-all duration-300 group-hover:brightness-110 group-hover:contrast-110"
-                                    autoPlay
-                                    loop
-                                    muted
-                                    playsInline
-                                >
-                                    <source src="/Progress1.mp4" type="video/mp4" />
-                                    {/* Placeholder background */}
-                                    <div className="w-full h-full bg-gradient-to-br from-green-600 to-green-800 flex items-center justify-center">
-                                        <span className="text-white text-lg">Video 1</span>
-                                    </div>
-                                </video>
-                                {/* Hover overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
-                                    <div className="text-white text-sm font-semibold bg-black/30 px-2 py-1 rounded backdrop-blur-sm">
-                                        Development Process
-                                    </div>
-                                </div>
+                    <div className="mx-auto flex justify-center">
+                        <div className="group relative inline-flex overflow-hidden rounded-3xl border-4 border-primary bg-black/20 shadow-2xl shadow-black/40 transition-all duration-300 hover:scale-[1.02] hover:border-primary/70 hover:bg-black/30 hover:shadow-primary/25">
+                            <Image
+                                src="/progress.jpg"
+                                alt="Project progress"
+                                width={1200}
+                                height={900}
+                                priority
+                                className="block max-h-[52vh] w-auto max-w-full object-contain"
+                            />
+                            <div className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-center pb-5 opacity-0 transition-all duration-300 group-hover:opacity-100 md:pb-7">
+                                <span className="text-lg font-bold tracking-[0.2em] text-white drop-shadow-[0_3px_8px_rgba(0,0,0,0.9)] md:text-2xl">
+                                    GAME MAP OTW
+                                </span>
                             </div>
-                            <p className="text-white/90 text-sm md:text-lg mt-2 md:mt-3 text-center group-hover:text-white transition-colors duration-300 px-2" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
-                                Created The Logics for Movements.
-                            </p>
                         </div>
+                    </div>
 
-                        {/* Video 2 */}
-                        <div className="relative flex flex-col items-center group cursor-pointer">
-                            <div className="relative bg-black/20 rounded-3xl overflow-hidden border-4 border-primary hover:border-primary/60 hover:shadow-2xl hover:shadow-primary/20 transition-all duration-300 w-full max-w-[280px] md:w-80 hover:scale-105 group-hover:bg-black/30">
-                                <video 
-                                    ref={video2Ref}
-                                    className="w-full h-48 md:h-64 object-cover transition-all duration-300 group-hover:brightness-110 group-hover:contrast-110"
-                                    autoPlay
-                                    loop
-                                    muted
-                                    playsInline
-                                >
-                                    <source src="/Progress2.mp4" type="video/mp4" />
-                                    {/* Placeholder background */}
-                                    <div className="w-full h-full bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center">
-                                        <span className="text-white text-lg">Video 2</span>
-                                    </div>
-                                </video>
-                                {/* Hover overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
-                                    <div className="text-white text-sm font-semibold bg-black/30 px-2 py-1 rounded backdrop-blur-sm">
-                                        Animation Design
-                                    </div>
-                                </div>
-                            </div>
-                            <p className="text-white/90 text-sm md:text-lg mt-2 md:mt-3 text-center group-hover:text-white transition-colors duration-300 px-2" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
-                                Added avatar with Animations for realistic movement.
-                            </p>
-                        </div>
-
-                        {/* Video 3 */}
-                        <div className="relative flex flex-col items-center group cursor-pointer">
-                            <div className="relative bg-black/20 rounded-3xl overflow-hidden border-4 border-primary hover:border-primary/60 hover:shadow-2xl hover:shadow-primary/20 transition-all duration-300 w-full max-w-[280px] md:w-80 hover:scale-105 group-hover:bg-black/30">
-                                <video 
-                                    ref={video3Ref}
-                                    className="w-full h-48 md:h-64 object-cover transition-all duration-300 group-hover:brightness-110 group-hover:contrast-110"
-                                    autoPlay
-                                    loop
-                                    muted
-                                    playsInline
-                                >
-                                    <source src="/Progress3.mp4" type="video/mp4" />
-                                    {/* Placeholder background */}
-                                    <div className="w-full h-full bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center">
-                                        <span className="text-white text-lg">Video 3</span>
-                                    </div>
-                                </video>
-                                {/* Hover overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
-                                    <div className="text-white text-sm font-semibold bg-black/30 px-2 py-1 rounded backdrop-blur-sm">
-                                        Game Integration
-                                    </div>
-                                </div>
-                            </div>
-                            <p className="text-white/90 text-sm md:text-lg mt-2 md:mt-3 text-center group-hover:text-white transition-colors duration-300 px-2" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
-                                Jumped into the game environment with the actual interactions.
-                            </p>
-                        </div>
-
-                        {/* Video 4 */}
-                        <div className="relative flex flex-col items-center group cursor-pointer">
-                            <div className="relative bg-black/20 rounded-3xl overflow-hidden border-4 border-primary hover:border-primary/60 hover:shadow-2xl hover:shadow-primary/20 transition-all duration-300 w-full max-w-[280px] md:w-80 hover:scale-105 group-hover:bg-black/30">
-                                <Image 
-                                    src="/Progress4.jpeg"
-                                    alt="Behind the scenes - Part 4"
-                                    width={320}
-                                    height={256}
-                                    className="w-full h-48 md:h-64 object-cover transition-all duration-300 group-hover:brightness-110 group-hover:contrast-110 group-hover:scale-105"
-                                />
-                                {/* Hover overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
-                                    <div className="text-white text-sm font-semibold bg-black/30 px-2 py-1 rounded backdrop-blur-sm">
-                                        Behind the Scenes
-                                    </div>
-                                </div>
-                            </div>
-                            <p className="text-white/90 text-sm md:text-lg mt-2 md:mt-3 text-center group-hover:text-white transition-colors duration-300 px-2" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
-                                We work on new ideas every day so that everyone can enjoy.
-                            </p>
-                        </div>
+                    <div className="mx-auto mt-6 max-w-3xl rounded-2xl border border-white/15 bg-black/35 px-5 py-4 text-center backdrop-blur-sm transition-all duration-300 hover:scale-[1.01] hover:border-white/30 hover:bg-black/45 hover:shadow-xl hover:shadow-black/30 md:mt-8 md:px-8 md:py-5">
+                        <p className="text-sm leading-relaxed text-white/90 md:text-lg" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.75)' }}>
+                            The dev team is deep in the workshop, shaping the game map, refining the details, and getting everything ready for the drop. The full map reveal is coming very soon, so stay tuned. More updates are on the way, and things are only getting better from here.
+                        </p>
                     </div>
                 </div>
             </div>
